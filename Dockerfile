@@ -5,12 +5,16 @@ MAINTAINER jamesyale james.yale@specsavers.com
 COPY ngtech-squid.repo /etc/yum.repos.d/ngtech-squid.repo
 
 RUN yum update -y && yum install -y epel-release && yum clean -y all
-
-RUN yum update -y && yum install -y squid squid-helpers && yum clean -y all
+RUN yum update -y && yum install -y httpd-tools squid squid-helpers && yum clean -y all
+RUN yum update -y && yum install -y whatprovides */htpasswd  && yum clean -y all
 
 COPY squid-config/squid.ssl.conf /etc/squid/squid.ssl.conf
 
 COPY squid-config/ssl.pem /etc/squid/ssl.pem
+
+COPY squid-config/mime.conf  /etc/squid/
+
+COPY squid-config/password   /etc/squid/
 
 # create squid cache dirs
 RUN /usr/sbin/squid -N -z -f /etc/squid/squid.ssl.conf
